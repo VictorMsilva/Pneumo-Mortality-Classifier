@@ -83,13 +83,13 @@ def hello_world():
 @app.route('/api/prepare_dataset', methods=['PATCH'])
 @cross_origin()
 def prepare_dataset():
-    global global_df
+#    global global_df
     global_df = dataset.get_dataframe()
-    return 'dataset prepared',200    
+#    return 'dataset prepared',200    
 
-@app.route('/api/train_model', methods=['PATCH'])
-@cross_origin()
-def train_model():
+#@app.route('/api/train_model', methods=['PATCH'])
+#@cross_origin()
+#def train_model():
     global_clf = LogisticRegression(random_state=0, max_iter=10000)
     X = global_df.iloc[:,:-1].values
     y = global_df['DECEASED']
@@ -108,8 +108,6 @@ def train_model():
 @app.route('/api/predict', methods=['POST'])
 @cross_origin()
 def predict():
-
-  global global_clf
 
   content = request.get_json()
   rq_id_paciente = content['id_paciente']

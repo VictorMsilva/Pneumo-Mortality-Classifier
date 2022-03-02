@@ -90,7 +90,7 @@ def prepare_dataset():
 @app.route('/api/train_model', methods=['PATCH'])
 @cross_origin()
 def train_model():
-    global_df = LogisticRegression(random_state=0, max_iter=10000)
+    global_clf = LogisticRegression(random_state=0, max_iter=10000)
     X = global_df.iloc[:,:-1].values
     y = global_df['DECEASED']
     groups = global_df['PATIENT']
@@ -101,7 +101,7 @@ def train_model():
         X_test = X[test_idx]
         y_train = y.iloc[train_idx]
         y_test = y.iloc[test_idx]
-        clf.fit(X_train,y_train)
+        global_clf.fit(X_train,y_train)
     return 'model trained',200
 
 

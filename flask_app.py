@@ -13,8 +13,8 @@ CORS(app, support_credentials=True)
 #inicializando Database
 db = SQLAlchemy(app)
 
-df = None
-clf = None
+global_df = None
+global_clf = None
 
 
 class Paciente(db.Model):
@@ -83,17 +83,18 @@ def hello_world():
 @app.route('/api/prepare_dataset', methods=['PATCH'])
 @cross_origin()
 def prepare_dataset():
-    global df
-    df = dataset.get_dataframe()
+    global global_df
+    global_df = dataset.get_dataframe()
     return 'dataset prepared',200    
 
 @app.route('/api/train_model', methods=['PATCH'])
 @cross_origin()
 def train_model():
-    global clf
-    global df
-
-    clf = model.train_model(df)
+    global global_clf
+    
+    df = global_df
+    
+    global_clf = model.train_model(df)
     return 'model trained',200
 
 
@@ -101,7 +102,7 @@ def train_model():
 @cross_origin()
 def predict():
 
-  global clf
+  global global_clf
 
   content = request.get_json()
   rq_id_paciente = content['id_paciente']
@@ -118,7 +119,7 @@ def predict():
   rq_mental = content['mental']
   rq_ventmec = content['ventmec']
 
-  result = clf.predict_proba([[rq_id_paciente,rq_idade,rq_sexo,rq_tempo,rq_pulso,rq_pressao,rq_glicemia,rq_sodio,rq_hemato,rq_ureia,rq_mental,rq_ventmec]])
+  result = global_clf.predict_proba([[rq_id_paciente,rq_idade,rq_sexo,rq_tempo,rq_pulso,rq_pressao,rq_glicemia,rq_sodio,rq_hemato,rq_ureia,rq_mental,rq_ventmec]])
 
   if (result[0,0] > result[0,1]):
         classe = 0

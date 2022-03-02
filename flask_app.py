@@ -3,7 +3,7 @@ from flask_cors import CORS, cross_origin
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy.exc import SQLAlchemyError
 from sklearn.linear_model import LogisticRegression
-import model
+from sklearn.model_selection import GroupShuffleSplit
 import json
 import dataset
 
@@ -14,7 +14,7 @@ CORS(app, support_credentials=True)
 db = SQLAlchemy(app)
 
 global_df = None
-global_clf = None
+global_clf = LogisticRegression(random_state=0, max_iter=10000)
 
 
 class Paciente(db.Model):
@@ -90,9 +90,18 @@ def prepare_dataset():
 @app.route('/api/train_model', methods=['PATCH'])
 @cross_origin()
 def train_model():
-    global global_clf
-    print(global_df)
-    global_clf = model.train_model(global_df)
+    global_df = LogisticRegression(random_state=0, max_iter=10000)
+    X = global_df.iloc[:,:-1].values
+    y = global_df['DECEASED']
+    groups = global_df['PATIENT']
+
+    gss = GroupShuffleSplit(n_splits=1, train_size=.8, random_state=7)
+    for train_idx, test_idx in gss.split(X, y, groups):
+        X_train = X[train_idx]
+        X_test = X[test_idx]
+        y_train = y.iloc[train_idx]
+        y_test = y.iloc[test_idx]
+        clf.fit(X_train,y_train)
     return 'model trained',200
 
 

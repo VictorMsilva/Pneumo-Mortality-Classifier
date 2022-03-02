@@ -79,6 +79,11 @@ def train_model():
     clf = model.get_trained_model()
     return 'Model Trained',200
 
+@app.route('/api/prepare_dataset', methods=['PATCH'])
+def prepare_dataset():
+    model.prepare_dataset()
+    return 'Model Trained',200    
+
 
 @app.route('/api/predict', methods=['POST'])
 def predict():

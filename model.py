@@ -7,11 +7,10 @@ clf = LogisticRegression(random_state=0, max_iter=10000)
 
 def train_model(df):
 	global clf
-	df_model = df
 
-	X = df_model.iloc[:,:-1].values
-	y = df_model['DECEASED']
-	groups = df_model['PATIENT']
+	X = df.iloc[:,:-1].values
+	y = df['DECEASED']
+	groups = df['PATIENT']
 
 	index = 0
 	gss = GroupShuffleSplit(n_splits=1, train_size=.8, random_state=7)

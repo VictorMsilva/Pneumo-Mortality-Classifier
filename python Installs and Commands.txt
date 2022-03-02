@@ -2,3 +2,13 @@ pip install pandas
 python -m venv virtual
 source virtual/scripts/activate
 export FLASK_APP=flask_app.py
+pip freeze > requirements.txt
+
+
+git add .
+
+git commit -m "new Updates"
+
+git push origin master --force
+
+

@@ -5,13 +5,17 @@ from sqlalchemy.exc import SQLAlchemyError
 from sklearn.linear_model import LogisticRegression
 import model
 import json
-
+import dataset
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///painel.bd'
 CORS(app, support_credentials=True)
 #inicializando Database
 db = SQLAlchemy(app)
+
+df = None
+clf = None
+
 
 class Paciente(db.Model):
     id_paciente = db.Column(db.Integer, primary_key = True)
@@ -76,23 +80,29 @@ def hello_world():
     return "<p>Mortality REST Service Online</p>"
 
 
-@app.route('/api/train_model', methods=['PATCH'])
-@cross_origin()
-def train_model():
-    model.train_model()
-    clf = model.get_trained_model()
-    return 'Model Trained',200
-
 @app.route('/api/prepare_dataset', methods=['PATCH'])
 @cross_origin()
 def prepare_dataset():
-    model.prepare_dataset()
-    return 'Model Trained',200    
+    global df
+    df = dataset.get_dataframe()
+    return 'dataset prepared',200    
+
+@app.route('/api/train_model', methods=['PATCH'])
+@cross_origin()
+def train_model():
+    global clf
+    global df
+
+    clf = model.train_model(df)
+    return 'model trained',200
 
 
 @app.route('/api/predict', methods=['POST'])
 @cross_origin()
 def predict():
+
+  global clf
+
   content = request.get_json()
   rq_id_paciente = content['id_paciente']
   rq_nome = content['nome']

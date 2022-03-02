@@ -1,15 +1,15 @@
 import dataset
 from sklearn.linear_model import LogisticRegression
 from sklearn.model_selection import GroupShuffleSplit
-import pandas as pd
+
 
 clf = LogisticRegression(random_state=0, max_iter=10000)
-df = pd.DataFrame() 
+
 
 def prepare_dataset():
-	df = dataset.get_dataframe()
+		
 
-def train_model():
+def train_model(df):
 	df_model = df
 
 	X = df_model.iloc[:,:-1].values
@@ -26,5 +26,5 @@ def train_model():
 		y_test = y.iloc[test_idx]
 		clf.fit(X_train,y_train)
 
-def get_trained_model():
-	return clf		
+	return clf
+		

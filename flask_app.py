@@ -91,10 +91,7 @@ def prepare_dataset():
 @cross_origin()
 def train_model():
     global global_clf
-    
-    df = global_df
-    
-    global_clf = model.train_model(df)
+    global_clf = model.train_model(global_df)
     return 'model trained',200
 
 

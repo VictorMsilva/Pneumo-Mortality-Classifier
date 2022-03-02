@@ -1,1 +1,1 @@
-web: gunicorn flask_app:app --timeout 15 --keep-alive 5 --log-level debug
+web: gunicorn flask_app:app --timeout 30 --keep-alive 5

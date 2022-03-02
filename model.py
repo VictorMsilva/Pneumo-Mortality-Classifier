@@ -5,11 +5,8 @@ from sklearn.model_selection import GroupShuffleSplit
 
 clf = LogisticRegression(random_state=0, max_iter=10000)
 
-
-def prepare_dataset():
-		
-
 def train_model(df):
+	global clf
 	df_model = df
 
 	X = df_model.iloc[:,:-1].values

@@ -1,6 +1,7 @@
 from flask import Flask, jsonify, request
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy.exc import SQLAlchemyError
+from sklearn.linear_model import LogisticRegression
 import model
 import json
 
@@ -10,6 +11,7 @@ app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///painel.bd'
 #inicializando Database
 db = SQLAlchemy(app)
 
+clf = LogisticRegression(random_state=0, max_iter=10000)
 
 class Paciente(db.Model):
     id_paciente = db.Column(db.Integer, primary_key = True)
@@ -74,7 +76,7 @@ def hello_world():
 
 
 @app.route('/api/train_model', methods=['PATCH'])
-def hello_world():
+def train_model():
     model.train_model()
     clf = model.get_trained_model()
     return 'Model Trained',200

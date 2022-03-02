@@ -11,8 +11,6 @@ app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///painel.bd'
 #inicializando Database
 db = SQLAlchemy(app)
 
-clf = LogisticRegression(random_state=0, max_iter=10000)
-
 class Paciente(db.Model):
     id_paciente = db.Column(db.Integer, primary_key = True)
     nome = db.Column(db.String(200), nullable = False)

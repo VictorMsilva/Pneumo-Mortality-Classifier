@@ -22,8 +22,6 @@ def train_model():
 		y_train = y.iloc[train_idx]
 		y_test = y.iloc[test_idx]
 		clf.fit(X_train,y_train)
-		print("model trained with current dataset")
-
 
 def get_trained_model():
 	return clf		

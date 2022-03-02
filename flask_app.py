@@ -1,4 +1,5 @@
 from flask import Flask, jsonify, request
+from flask_cors import CORS, cross_origin
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy.exc import SQLAlchemyError
 from sklearn.linear_model import LogisticRegression
@@ -8,6 +9,7 @@ import json
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///painel.bd'
+CORS(app, support_credentials=True)
 #inicializando Database
 db = SQLAlchemy(app)
 
@@ -69,23 +71,27 @@ def get_up_down(antigo, novo):
         return('')
 
 @app.route("/")
+@cross_origin()
 def hello_world():
     return "<p>Mortality REST Service Online</p>"
 
 
 @app.route('/api/train_model', methods=['PATCH'])
+@cross_origin()
 def train_model():
     model.train_model()
     clf = model.get_trained_model()
     return 'Model Trained',200
 
 @app.route('/api/prepare_dataset', methods=['PATCH'])
+@cross_origin()
 def prepare_dataset():
     model.prepare_dataset()
     return 'Model Trained',200    
 
 
 @app.route('/api/predict', methods=['POST'])
+@cross_origin()
 def predict():
   content = request.get_json()
   rq_id_paciente = content['id_paciente']
@@ -161,6 +167,7 @@ def predict():
   return '', 200   
 
 @app.route('/api/list_pacientes')
+@cross_origin()
 def get_patients():
   list_pacientes = Paciente.query.order_by(Paciente.percent_risco.desc())
 
@@ -171,6 +178,7 @@ def get_patients():
 
 
 @app.route('/api/deleta_paciente/<int:id_paciente>', methods=['DELETE'])
+@cross_origin()
 def del_patient(id_paciente):
   paciente_db = Paciente.query.get_or_404(id_paciente)
   

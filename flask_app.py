@@ -60,9 +60,6 @@ class Paciente(db.Model):
            'percent_risco': self.percent_risco
        }
 
-model.train_model()
-clf = model.get_trained_model()
-
 def get_up_down(antigo, novo):
     if(novo > antigo):
         return('up')
@@ -74,6 +71,13 @@ def get_up_down(antigo, novo):
 @app.route("/")
 def hello_world():
     return "<p>Mortality REST Service Online</p>"
+
+
+@app.route('/api/train_model', methods=['PATCH'])
+def hello_world():
+    model.train_model()
+    clf = model.get_trained_model()
+    return 'Model Trained',200
 
 
 @app.route('/api/predict', methods=['POST'])

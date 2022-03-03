@@ -13,7 +13,6 @@ CORS(app, support_credentials=True)
 #inicializando Database
 db = SQLAlchemy(app)
 
-global_df = None
 global_clf = LogisticRegression(random_state=0, max_iter=10000)
 
 
@@ -80,16 +79,12 @@ def hello_world():
     return "<p>Mortality REST Service Online</p>"
 
 
-@app.route('/api/prepare_dataset', methods=['PATCH'])
+@app.route('/api/prepare_model', methods=['PATCH'])
 @cross_origin()
 def prepare_dataset():
-#    global global_df
-    global_df = dataset.get_dataframe()
-#    return 'dataset prepared',200    
+    
+    global_df = pd.read_excel('dataset.xlsx')
 
-#@app.route('/api/train_model', methods=['PATCH'])
-#@cross_origin()
-#def train_model():
     global_clf = LogisticRegression(random_state=0, max_iter=10000)
     X = global_df.iloc[:,:-1].values
     y = global_df['DECEASED']

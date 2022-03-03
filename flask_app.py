@@ -4,6 +4,7 @@ from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy.exc import SQLAlchemyError
 from sklearn.linear_model import LogisticRegression
 from sklearn.model_selection import GroupShuffleSplit
+import pickle
 import pandas as pd
 import json
 
@@ -13,11 +14,6 @@ CORS(app, support_credentials=True)
 #inicializando Database
 db = SQLAlchemy(app)
 
-#Train Model
-global global_clf
-global global_df
-
-global_clf = LogisticRegression(random_state=0, max_iter=10000)
 global_df = pd.read_csv('dataset.csv')
 
 class Paciente(db.Model):
@@ -77,16 +73,11 @@ def get_up_down(antigo, novo):
     else:    
         return('')
 
-@app.route("/")
+@app.route("/api/train_model")
 @cross_origin()
-def hello_world():
-    return "<p>Mortality REST Service Online</p>"
-
-@app.route('/api/predict', methods=['POST'])
-@cross_origin()
-def predict():
-  global global_df
-
+def train_model():
+  global global_df  
+  model = LogisticRegression(random_state=0, max_iter=10000)
   X = global_df.iloc[:,:-1].values
   y = global_df['DECEASED']
   groups = global_df['PATIENT']
@@ -96,8 +87,18 @@ def predict():
     X_test = X[test_idx]
     y_train = y.iloc[train_idx]
     y_test = y.iloc[test_idx]
-    global_clf.fit(X_train,y_train)  
+    model.fit(X_train,y_train)
+  pickle.dump(model, open("model.pkl", "wb"))
+  return '',200  
 
+@app.route("/")
+@cross_origin()
+def hello_world():
+    return "<p>Mortality REST Service Online</p>"    
+
+@app.route('/api/predict', methods=['POST'])
+@cross_origin()
+def predict():
   content = request.get_json()
   rq_id_paciente = content['id_paciente']
   rq_nome = content['nome']
@@ -113,7 +114,8 @@ def predict():
   rq_mental = content['mental']
   rq_ventmec = content['ventmec']
 
-  result = global_clf.predict_proba([[rq_id_paciente,rq_idade,rq_tempo,rq_pulso,rq_pressao,rq_glicemia,rq_sodio,rq_hemato,rq_ureia,rq_mental,rq_ventmec]])
+  model = pickle.load(open("model.pkl", "rb"))
+  result = model.predict_proba([[rq_id_paciente,rq_idade,rq_tempo,rq_pulso,rq_pressao,rq_glicemia,rq_sodio,rq_hemato,rq_ureia,rq_mental,rq_ventmec]])
 
   if (result[0,0] > result[0,1]):
         classe = 0
@@ -138,7 +140,7 @@ def predict():
         paciente_db.nome = paciente.nome
         paciente_db.idade = paciente.idade
         paciente_db.sexo = paciente.sexo
-        paciente_db.tempo = paciente.tempo/24
+        paciente_db.tempo = round(paciente.tempo/24)
         paciente_db.pulso = paciente.pulso
         paciente_db.sodio = paciente.sodio
         paciente_db.hemato = paciente.hemato

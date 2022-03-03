@@ -109,7 +109,7 @@ def predict():
   rq_mental = content['mental']
   rq_ventmec = content['ventmec']
 
-  result = global_clf.predict_proba([[rq_id_paciente,rq_idade,rq_sexo,rq_tempo,rq_pulso,rq_pressao,rq_glicemia,rq_sodio,rq_hemato,rq_ureia,rq_mental,rq_ventmec]])
+  result = global_clf.predict_proba([[rq_id_paciente,rq_idade,rq_tempo,rq_pulso,rq_pressao,rq_glicemia,rq_sodio,rq_hemato,rq_ureia,rq_mental,rq_ventmec]])
 
   if (result[0,0] > result[0,1]):
         classe = 0

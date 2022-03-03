@@ -14,7 +14,7 @@ CORS(app, support_credentials=True)
 db = SQLAlchemy(app)
 
 global_clf = LogisticRegression(random_state=0, max_iter=10000)
-global_df 
+global_df = pd.DataFrame()
 
 class Paciente(db.Model):
     id_paciente = db.Column(db.Integer, primary_key = True)
@@ -86,9 +86,9 @@ def load_dataset():
     global_df = pd.read_excel('dataset.xlsx')
     return 'model trained',200
 
-@app.route('/api/prepare_model', methods=['PATCH'])
+@app.route('/api/train_model', methods=['PATCH'])
 @cross_origin()
-def prepare_dataset():
+def train_model():
     
     #global_df = pd.read_excel('dataset.xlsx')
     global_clf = LogisticRegression(random_state=0, max_iter=10000)

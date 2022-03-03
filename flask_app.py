@@ -14,7 +14,7 @@ CORS(app, support_credentials=True)
 db = SQLAlchemy(app)
 
 global_clf = LogisticRegression(random_state=0, max_iter=10000)
-global_df = = pd.read_csv('dataset.csv')
+global_df = pd.read_csv('dataset.csv')
 
 class Paciente(db.Model):
     id_paciente = db.Column(db.Integer, primary_key = True)

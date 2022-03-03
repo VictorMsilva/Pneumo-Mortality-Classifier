@@ -16,17 +16,6 @@ db = SQLAlchemy(app)
 #Train Model
 global_clf = LogisticRegression(random_state=0, max_iter=10000)
 global_df = pd.read_csv('dataset.csv')
-X = global_df.iloc[:,:-1].values
-y = global_df['DECEASED']
-groups = global_df['PATIENT']
-gss = GroupShuffleSplit(n_splits=1, train_size=.8, random_state=7)
-for train_idx, test_idx in gss.split(X, y, groups):
-    X_train = X[train_idx]
-    X_test = X[test_idx]
-    y_train = y.iloc[train_idx]
-    y_test = y.iloc[test_idx]
-    global_clf.fit(X_train,y_train)
-
 
 class Paciente(db.Model):
     id_paciente = db.Column(db.Integer, primary_key = True)
@@ -93,6 +82,18 @@ def hello_world():
 @app.route('/api/predict', methods=['POST'])
 @cross_origin()
 def predict():
+  global global_df
+
+  X = global_df.iloc[:,:-1].values
+  y = global_df['DECEASED']
+  groups = global_df['PATIENT']
+  gss = GroupShuffleSplit(n_splits=1, train_size=.8, random_state=7)  
+  for train_idx, test_idx in gss.split(X, y, groups):
+    X_train = X[train_idx]
+    X_test = X[test_idx]
+    y_train = y.iloc[train_idx]
+    y_test = y.iloc[test_idx]
+    global_clf.fit(X_train,y_train)  
 
   content = request.get_json()
   rq_id_paciente = content['id_paciente']

@@ -14,7 +14,7 @@ CORS(app, support_credentials=True)
 db = SQLAlchemy(app)
 
 global_clf = LogisticRegression(random_state=0, max_iter=10000)
-global_df = pd.read_excel('dataset.xlsx')
+global_df 
 
 class Paciente(db.Model):
     id_paciente = db.Column(db.Integer, primary_key = True)
@@ -78,6 +78,13 @@ def get_up_down(antigo, novo):
 def hello_world():
     return "<p>Mortality REST Service Online</p>"
 
+
+@app.route('/api/load_dataset', methods=['PATCH'])
+@cross_origin()
+def load_dataset():
+    global global_df
+    global_df = pd.read_excel('dataset.xlsx')
+    return 'model trained',200
 
 @app.route('/api/prepare_model', methods=['PATCH'])
 @cross_origin()

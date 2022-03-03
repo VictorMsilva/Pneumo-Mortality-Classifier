@@ -134,7 +134,7 @@ def predict():
         paciente_db.nome = paciente.nome
         paciente_db.idade = paciente.idade
         paciente_db.sexo = paciente.sexo
-        paciente_db.tempo = paciente.tempo
+        paciente_db.tempo = paciente.tempo/24
         paciente_db.pulso = paciente.pulso
         paciente_db.sodio = paciente.sodio
         paciente_db.hemato = paciente.hemato

@@ -5,7 +5,6 @@ from sqlalchemy.exc import SQLAlchemyError
 from sklearn.linear_model import LogisticRegression
 from sklearn.model_selection import GroupShuffleSplit
 import json
-import dataset
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///painel.bd'

@@ -14,6 +14,9 @@ CORS(app, support_credentials=True)
 db = SQLAlchemy(app)
 
 #Train Model
+global global_clf
+global global_df
+
 global_clf = LogisticRegression(random_state=0, max_iter=10000)
 global_df = pd.read_csv('dataset.csv')
 

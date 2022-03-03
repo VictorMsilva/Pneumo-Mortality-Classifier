@@ -4,6 +4,7 @@ from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy.exc import SQLAlchemyError
 from sklearn.linear_model import LogisticRegression
 from sklearn.model_selection import GroupShuffleSplit
+import pandas as pd
 import json
 
 app = Flask(__name__)

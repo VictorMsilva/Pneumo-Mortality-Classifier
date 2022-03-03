@@ -107,7 +107,7 @@ def predict():
   rq_sodio = content['sodio']
   rq_hemato = content['hemato']
   rq_pressao = content['pressao']
-  rq_glicemia = content['sodio']
+  rq_glicemia = content['glicemia']
   rq_ureia = content['ureia']
   rq_mental = content['mental']
   rq_ventmec = content['ventmec']

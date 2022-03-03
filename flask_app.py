@@ -73,16 +73,7 @@ def get_up_down(antigo, novo):
     else:    
         return('')
 
-@app.route("/")
-@cross_origin()
-def hello_world():
-    return "<p>Mortality REST Service Online</p>"
-
-
-@app.route('/api/train_model', methods=['PATCH'])
-@cross_origin()
 def train_model():
-    
     global_clf = LogisticRegression(random_state=0, max_iter=10000)
 
     X = global_df.iloc[:,:-1].values
@@ -96,8 +87,12 @@ def train_model():
         y_train = y.iloc[train_idx]
         y_test = y.iloc[test_idx]
         global_clf.fit(X_train,y_train)
-    return 'model trained',200
+        
 
+@app.route("/")
+@cross_origin()
+def hello_world():
+    return "<p>Mortality REST Service Online</p>"
 
 @app.route('/api/predict', methods=['POST'])
 @cross_origin()
@@ -200,3 +195,6 @@ def del_patient(id_paciente):
     return error
 
   return '', 200     
+
+
+  train_model()

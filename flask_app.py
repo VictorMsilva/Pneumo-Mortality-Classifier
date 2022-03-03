@@ -14,8 +14,6 @@ CORS(app, support_credentials=True)
 #inicializando Database
 db = SQLAlchemy(app)
 
-global_df = pd.read_csv('dataset.csv')
-
 class Paciente(db.Model):
     id_paciente = db.Column(db.Integer, primary_key = True)
     nome = db.Column(db.String(200), nullable = False)
@@ -76,7 +74,7 @@ def get_up_down(antigo, novo):
 @app.route("/api/train_model")
 @cross_origin()
 def train_model():
-  global global_df  
+  global_df = pd.read_csv('dataset.csv')  
   model = LogisticRegression(random_state=0, max_iter=10000)
   X = global_df.iloc[:,:-1].values
   y = global_df['DECEASED']

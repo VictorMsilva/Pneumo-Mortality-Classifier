@@ -147,6 +147,8 @@ def predict():
         paciente_db.ureia = paciente.ureia
         paciente_db.mental = paciente.mental
         paciente_db.ventmec = paciente.ventmec
+        paciente_db.percent_risco = paciente.percent_risco
+        paciente_db.classe = paciente.classe
 
         try:
             db.session.commit()
